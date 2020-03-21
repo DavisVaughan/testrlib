@@ -1,6 +1,7 @@
 # `SOURCES_PKG` are the current project's c files. These are generally
 # at the top level in the `src/` directory for R packages, but they can
-# also have their own folder.
+# also have their own folder. For example, the `proj-dir/` folder has
+# additional C files used by this project.
 
 # `SOURCES_R_LIB` contains all of the files in `r-lib/` that need to be
 # tracked by make. This list is something that would be copied into a package
@@ -14,8 +15,19 @@
 # clean up only `.o` files in the top level directory. Without this, a
 # check() will fail with a note about `.o` files in `r-lib/` existing.
 
+# The `PKG_CFLAGS` is optional. `-I ./r-lib/` includes the `r-lib/` header
+# files in such a way that you can just `#include "r-lib.h"` from anywhere
+# in the project to get access to it. Without this, at the top level you have
+# to do `#include "r-lib/r-lib.h"` and in folders you'd have to do
+# `#include "../r-lib/r-lib.h"`.
+# NOTE: It might be clearer to do `-I .` so you always include as
+# "r-lib/r-lib.h".
+
+PKG_CFLAGS = -I ./r-lib/
+
 SOURCES_PKG = \
-	code.c
+	code.c \
+	proj-dir/code3.c
 
 SOURCES_R_LIB = \
 	r-lib/code2.c
