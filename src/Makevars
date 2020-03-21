@@ -1,0 +1,32 @@
+# `SOURCES_PKG` are the current project's c files. These are generally
+# at the top level in the `src/` directory for R packages, but they can
+# also have their own folder.
+
+# `SOURCES_R_LIB` contains all of the files in `r-lib/` that need to be
+# tracked by make. This list is something that would be copied into a package
+# that is using the `r-lib/` library.
+
+# We set the `all` target manually because otherwise the `clean` target
+# will attempt to run when a simple `make` is called because it would be
+# the first target in the file.
+
+# The `clean` target is required, because by default R's mechanism will
+# clean up only `.o` files in the top level directory. Without this, a
+# check() will fail with a note about `.o` files in `r-lib/` existing.
+
+SOURCES_PKG = \
+	code.c
+
+SOURCES_R_LIB = \
+	r-lib/code2.c
+
+SOURCES = $(SOURCES_PKG) $(SOURCES_R_LIB)
+
+OBJECTS = $(SOURCES:.c=.o)
+
+all: $(SHLIB)
+
+.PHONY: clean
+
+clean:
+	rm -f $(OBJECTS)
